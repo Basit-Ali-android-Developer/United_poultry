@@ -13,3 +13,14 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/AndroidProjectSystem.xml
+/.idea/appInsightsSettings.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/gradle.xml
+/.idea/kotlinc.xml
+/.idea/migrations.xml
+/.idea/misc.xml
+/.idea/runConfigurations.xml
+/.idea/shelf/Uncommitted_changes_before_Update_at_7_29_2026_4_12_PM_[Changes]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Update_at_7_29_2026_4_12_PM__Changes_.xml
+/.idea/vcs.xml
