@@ -1,0 +1,56 @@
+Index: app/src/main/java/com/example/unitedpoultry/Splash/SplashActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.unitedpoultry.Splash\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.os.Handler\r\nimport android.os.Looper\r\nimport android.widget.TextView\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport com.example.unitedpoultry.AdminDashBoard.AdminDashBoardActivity\r\nimport com.example.unitedpoultry.Authentications.AuthenticationActivity\r\nimport com.example.unitedpoultry.Authentications.login.model.LoginResponseModel\r\nimport com.example.unitedpoultry.BaseActivity\r\nimport com.example.unitedpoultry.R\r\nimport com.example.unitedpoultry.RiderDashBoard.RiderDashBoardActivity\r\nimport com.example.unitedpoultry.SessionManager\r\nimport com.example.unitedpoultry.Welcome.WelcomeActivity\r\nimport com.example.unitedpoultry.util.AppConstants\r\nimport com.google.gson.Gson\r\nimport kotlinx.coroutines.delay\r\nimport org.koin.android.ext.android.inject\r\n\r\nclass SplashActivity :  BaseActivity() {\r\n\r\n    private val sessionManager: SessionManager by inject()\r\n\r\n    private lateinit var dot1: TextView\r\n    private lateinit var dot2: TextView\r\n    private lateinit var dot3: TextView\r\n    private val handler = Handler(Looper.getMainLooper())\r\n    private var dotIndex = 0\r\n    private val delay: Long = 400 // milliseconds\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_splash)\r\n\r\n        configureStatusBar(\r\n            isLightBackground = false, // false = white icons\r\n            colorResId = R.color.primary\r\n        )\r\n\r\n        dot1 = findViewById(R.id.dot1)\r\n        dot2 = findViewById(R.id.dot2)\r\n        dot3 = findViewById(R.id.dot3)\r\n\r\n        animateDots()\r\n\r\n        handler.postDelayed({\r\n\r\n            navigateFunction()\r\n\r\n            finish() // Prevent returning to splash when back is pressed\r\n        }, 4000) // 4000 milliseconds = 4 seconds\r\n    }\r\n\r\n    private fun animateDots() {\r\n        val dots = arrayOf(dot1, dot2, dot3)\r\n        val defaultColor = android.graphics.Color.WHITE\r\n        val highlightColor = android.graphics.Color.parseColor(\"#FEAE55\")\r\n\r\n        handler.post(object : Runnable {\r\n            override fun run() {\r\n                // Reset all dots to white\r\n                for (dot in dots) {\r\n                    dot.setTextColor(defaultColor)\r\n                }\r\n                // Highlight current dot\r\n                dots[dotIndex].setTextColor(highlightColor)\r\n\r\n                dotIndex = (dotIndex + 1) % dots.size\r\n                handler.postDelayed(this, delay)\r\n            }\r\n        })\r\n    }\r\n\r\n    private fun navigateFunction(){\r\n\r\n        if (sessionManager.isLoggedIn()) {\r\n            // setting token\r\n            AppConstants.AUTH_TOKEN = sessionManager.getToken().toString()\r\n\r\n            //  getting user info\r\n            AppConstants.userData =\r\n                Gson().fromJson( sessionManager.getUserInfo(), LoginResponseModel::class.java)\r\n\r\n            if(AppConstants.userData!!.role_id == 1){\r\n                //startActivity(Intent(this@SplashActivity, AdminDashBoardActivity::class.java))\r\n                val intent = Intent(this@SplashActivity, AdminDashBoardActivity::class.java)\r\n                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK\r\n                startActivity(intent)\r\n                finish()\r\n\r\n\r\n            }else if (AppConstants.userData!!.role_id == 2){\r\n                //startActivity(Intent(this@SplashActivity, RiderDashBoardActivity::class.java))\r\n\r\n                val intent = Intent(this@SplashActivity, RiderDashBoardActivity::class.java)\r\n                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK\r\n                startActivity(intent)\r\n                finish()\r\n            }\r\n        } else {\r\n            startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java))\r\n            finish()\r\n        }\r\n    }\r\n\r\n\r\n        override fun onDestroy() {\r\n        super.onDestroy()\r\n        handler.removeCallbacksAndMessages(null)\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/unitedpoultry/Splash/SplashActivity.kt b/app/src/main/java/com/example/unitedpoultry/Splash/SplashActivity.kt
+--- a/app/src/main/java/com/example/unitedpoultry/Splash/SplashActivity.kt	(revision 9b839e9b164fea27e1cd3457eadee0e0c62f12c4)
++++ b/app/src/main/java/com/example/unitedpoultry/Splash/SplashActivity.kt	(date 1770725918641)
+@@ -43,6 +43,10 @@
+         dot2 = findViewById(R.id.dot2)
+         dot3 = findViewById(R.id.dot3)
+ 
++
++        if(intent.getIntExtra("response",0)==401){
++            sessionManager.logout()
++        }
+         animateDots()
+ 
+         handler.postDelayed({
+Index: app/src/main/java/com/example/unitedpoultry/network/retrofit/RetrofitSetup.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.unitedpoultry.network.retrofit\r\n\r\nimport android.content.Context\r\nimport android.util.Log\r\nimport com.example.unitedpoultry.network.api.ApiInterface\r\nimport com.example.unitedpoultry.util.AppConstants\r\nimport kotlinx.coroutines.CoroutineScope\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.launch\r\nimport okhttp3.OkHttpClient\r\nimport okhttp3.logging.HttpLoggingInterceptor\r\nimport retrofit2.Retrofit\r\nimport retrofit2.converter.gson.GsonConverterFactory\r\nimport java.util.concurrent.TimeUnit\r\n\r\n\r\nfun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {\r\n\r\n    return Retrofit.Builder()\r\n        .baseUrl(AppConstants.BASE_URL)\r\n        .client(okHttpClient)\r\n        .addConverterFactory(GsonConverterFactory.create())\r\n        .build()\r\n}\r\n\r\nfun provideOkHttpClient(context: Context): OkHttpClient {\r\n\r\n    val interceptor = HttpLoggingInterceptor()\r\n    return OkHttpClient.Builder()\r\n        .addInterceptor(interceptor.setLevel(HttpLoggingInterceptor.Level.BODY))\r\n        .addInterceptor { chain ->\r\n            val original = chain.request()\r\n            val request = original.newBuilder()\r\n\r\n            Log.v(\"AUTH_TOKEN\",\"AUTH_TOKEN \"+ AppConstants.AUTH_TOKEN)\r\n            //request.addHeader(\"Authorization\", AppConstants.Bearer + \" \" + AppConstants.AUTH_TOKEN)\r\n            request.addHeader(\"Authorization\",  AppConstants.AUTH_TOKEN)\r\n            request.addHeader(\"Accept\", \"application/json\")\r\n            val response = chain.proceed(request.build())\r\n\r\n            if (response.code==401){\r\n                CoroutineScope(Dispatchers.Main).launch {\r\n                    /*Toast.makeText(context, \"Your session has expired!, Please Login again\", Toast.LENGTH_LONG).show()\r\n                    val i = Intent(context, SplashActivity::class.java)\r\n                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);\r\n                    i.putExtra(\"response\",401)\r\n                    context.startActivity(i)*/\r\n                }\r\n            }\r\n            response\r\n\r\n        }\r\n\r\n        .connectTimeout(90, TimeUnit.SECONDS)\r\n        .writeTimeout(90, TimeUnit.SECONDS)\r\n        .readTimeout(90, TimeUnit.SECONDS)\r\n        .cache(null)\r\n        .build()\r\n\r\n}\r\n\r\nfun provideRetrofitInterface(retrofit: Retrofit): ApiInterface = retrofit.create(ApiInterface::class.java)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/unitedpoultry/network/retrofit/RetrofitSetup.kt b/app/src/main/java/com/example/unitedpoultry/network/retrofit/RetrofitSetup.kt
+--- a/app/src/main/java/com/example/unitedpoultry/network/retrofit/RetrofitSetup.kt	(revision 9b839e9b164fea27e1cd3457eadee0e0c62f12c4)
++++ b/app/src/main/java/com/example/unitedpoultry/network/retrofit/RetrofitSetup.kt	(date 1770725519249)
+@@ -1,7 +1,10 @@
+ package com.example.unitedpoultry.network.retrofit
+ 
+ import android.content.Context
++import android.content.Intent
+ import android.util.Log
++import android.widget.Toast
++import com.example.unitedpoultry.Splash.SplashActivity
+ import com.example.unitedpoultry.network.api.ApiInterface
+ import com.example.unitedpoultry.util.AppConstants
+ import kotlinx.coroutines.CoroutineScope
+@@ -40,11 +43,11 @@
+ 
+             if (response.code==401){
+                 CoroutineScope(Dispatchers.Main).launch {
+-                    /*Toast.makeText(context, "Your session has expired!, Please Login again", Toast.LENGTH_LONG).show()
++                    Toast.makeText(context, "Your session has expired!, Please Login again", Toast.LENGTH_LONG).show()
+                     val i = Intent(context, SplashActivity::class.java)
+                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                     i.putExtra("response",401)
+-                    context.startActivity(i)*/
++                    context.startActivity(i)
+                 }
+             }
+             response
