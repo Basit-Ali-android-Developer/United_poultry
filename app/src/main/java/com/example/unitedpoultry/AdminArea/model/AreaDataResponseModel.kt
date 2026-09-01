@@ -4,12 +4,15 @@ package com.example.unitedpoultry.AdminArea.model
 data class AreaModel(
     val id: Int,
     val name: String,
-    val description: String,
+    val description: String?,
     val city: String,
     val is_active: Boolean,
     val created_at: String,
     val updated_at: String,
-    val shops_count: Int
+    val shops_count: Int,
+    val visited: Int,
+    val pending:Int
+
 )
 
 // PaginationModel.kt

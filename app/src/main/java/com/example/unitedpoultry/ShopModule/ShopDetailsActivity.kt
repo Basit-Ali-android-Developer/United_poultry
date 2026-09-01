@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.unitedpoultry.AdminShopModule.model.ShopDetailsResponse
 import com.example.unitedpoultry.AdminShopModule.model.ShopDetailsResponseModel
 import com.example.unitedpoultry.BaseActivity
 import com.example.unitedpoultry.Collection.CollectionformActivity
@@ -18,10 +19,10 @@ import com.example.unitedpoultry.databinding.ActivityShopDetailsBinding
 import com.example.unitedpoultry.status_check.UserStatusChecker
 import com.example.unitedpoultry.status_check.viewmodel.UserStatusViewModel
 import com.example.unitedpoultry.util.AppConstants
-import com.example.unitedpoultry.util.AppConstants.userData
 import com.example.unitedpoultry.util.AppUtil
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Locale
 
 class ShopDetailsActivity : BaseActivity() {
 
@@ -29,11 +30,10 @@ class ShopDetailsActivity : BaseActivity() {
     private val viewModel: RiderShopDetailsViewModel by viewModel()
     private val viewModel1: UserStatusViewModel by viewModel()
 
-    private var shopDetails: ShopDetailsResponseModel? = null
+    private var shopDetails: ShopDetailsResponse? = null
     private var shopId: Int = 0
+    private var areaId: Int = 0
 
-    private lateinit var adapter: RecentActivityAdapter
-    private val activityList = mutableListOf<RecentActivityModel>()
 
 
 
@@ -46,7 +46,8 @@ class ShopDetailsActivity : BaseActivity() {
         configureStatusBar(false, R.color.primary)
 
         // areaId = intent.getIntExtra("AREA_ID", 0)
-        shopId = intent.getIntExtra("ID", 0)
+        shopId = intent.getIntExtra("SHOP_ID", 0)
+        areaId = intent.getIntExtra("AREA_ID", 0)
 
         if (shopId == 0) {
             Toast.makeText(this, "Invalid shop id", Toast.LENGTH_SHORT).show()
@@ -54,23 +55,37 @@ class ShopDetailsActivity : BaseActivity() {
             return
         }
 
+        fetchShopDetails(shopId)
+        onclick()
+
+
+
+
+        binding.recyclerRecentActivities.layoutManager =
+            LinearLayoutManager(this)
+
+
+    }
+
+
+    private fun onclick(){
 
         binding.backArrow.setOnClickListener { finish() }
 
         binding.btnNewSale.setOnClickListener {
-            // First check if the user is active
+
             UserStatusChecker.check(
                 lifecycleOwner = this,
-                viewModel = viewModel1,  // your UserStatusViewModel instance
+                viewModel = viewModel1,
 
                 onActive = {
-                    // ✅ User is active, proceed with navigation
                     shopDetails?.let { shop ->
                         val intent = Intent(this, SaleFormActivity::class.java)
                         intent.putExtra("ID", shop.id)
+                        intent.putExtra("AREA_ID", areaId)
                         intent.putExtra("NAME", shop.name)
                         intent.putExtra("ADDRESS", shop.address)
-                        intent.putExtra("DISCOUNT", shop.discount_per_petti)
+                        intent.putExtra("DISCOUNT", shop.discount_per_petti.toString())
                         startActivity(intent)
                     } ?: run {
                         Toast.makeText(this, "Shop details not loaded yet", Toast.LENGTH_SHORT).show()
@@ -92,48 +107,40 @@ class ShopDetailsActivity : BaseActivity() {
         }
 
 
+
         binding.btnCollectPayment.setOnClickListener {
-            shopDetails?.let { shop ->
+            // First check if the user is active
+            UserStatusChecker.check(
+                lifecycleOwner = this,
+                viewModel = viewModel1,
 
-                val intent = Intent(this, CollectionformActivity::class.java)
-                intent.putExtra("ID", shop.id)
-                intent.putExtra("NAME", shop.name)
-                intent.putExtra("ADDRESS", shop.address)
-                intent.putExtra("DISCOUNT", shop.discount_per_petti)
-                startActivity(intent)
+                onActive = {
+                    shopDetails?.let { shop ->
+                        val intent = Intent(this, CollectionformActivity::class.java)
+                        intent.putExtra("SHOP_ID", shop.id)
+                        //   intent.putExtra("AREA_ID", areaId)
+                        intent.putExtra("NAME", shop.name)
+                        intent.putExtra("ADDRESS", shop.address)
+                        intent.putExtra("BORROWED", shop.borrowed)
+                        startActivity(intent)
+                    } ?: run {
+                        Toast.makeText(this, "Shop details not loaded yet", Toast.LENGTH_SHORT).show()
+                    }
+                },
 
-            } ?: run {
-                Toast.makeText(this, "Shop details not loaded yet", Toast.LENGTH_SHORT).show()
-            }
+                onInactive = {
+                    Toast.makeText(
+                        this,
+                        "Your account is inactive. Contact admin.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                },
+
+                onError = { message ->
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            )
         }
-
-        binding.recyclerRecentActivities.layoutManager =
-            LinearLayoutManager(this)
-
-        // ✅ Sample Data
-        activityList.add(
-            RecentActivityModel("Purchase", "3 days ago, 10:35 PM", "cash", 1000)
-        )
-        activityList.add(
-            RecentActivityModel("Payment Received", "2 days ago, 02:15 PM", "credit", 5000)
-        )
-        activityList.add(
-            RecentActivityModel("Purchase", "1 day ago, 11:20 AM", "cash", 2000)
-        )
-
-        adapter = RecentActivityAdapter(this, activityList)
-        binding.recyclerRecentActivities.adapter = adapter
-
-
-
-    }
-
-    // ✅ refresh when coming back from edit
-    override fun onResume() {
-        super.onResume()
-
-        fetchShopDetails(shopId)
-
     }
 
     private fun fetchShopDetails(shopId: Int) {
@@ -167,35 +174,89 @@ class ShopDetailsActivity : BaseActivity() {
 
                 com.example.unitedpoultry.network.Status.ERROR -> {
                     AppUtil.stopLoader()
-                    Toast.makeText(this, apiResponse.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Network connection problem. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    private fun bindData(shop: ShopDetailsResponseModel) {
+//    private fun bindData(shop: ShopDetailsResponseModel) {
+//
+//        binding.tvShopName.text = shop.name
+//        binding.tvAddress.text = shop.address
+//       // binding.tvDiscountPerPatti.text = "Rs ${shop.discount_per_petti} per patti"
+//
+//        binding.tvContactName.text = shop.contact_person
+//        binding.tvPhoneNumber.text = shop.phone_number
+//
+////        binding.boxRate.text = "-"
+////        binding.tvReceivable.text = "-"
+////        binding.tvLastVisit.text = "-"
+////
+////        binding.tvCreditLimit.text = "-"
+//
+//     //   binding.tvInitials.text = getInitials(shop.contact_person)
+//
+//        val imageUrl = shop.image
+//        if (!imageUrl.isNullOrEmpty()) {
+//            binding.imgShop.visibility = View.VISIBLE
+//          //  binding.imgCamera.visibility = View.GONE
+//
+//            // Use full URL to show existing image
+//            val fullImageUrl = AppConstants.ImageURL + imageUrl
+//            Glide.with(this)
+//                .load(fullImageUrl)
+//                .centerCrop()
+//                .placeholder(binding.imgShop.drawable)
+//                .into(binding.imgShop)
+//        }
+//
+//
+//    }
+
+
+    private fun bindData(shop: ShopDetailsResponse) {
+
 
         binding.tvShopName.text = shop.name
         binding.tvAddress.text = shop.address
-        binding.tvDiscountPerPatti.text = "Rs ${shop.discount_per_petti} per patti"
-
-        binding.tvContactName.text = shop.contact_person
+        binding.tvContactName.text = shop.owner_name
         binding.tvPhoneNumber.text = shop.phone_number
 
-//        binding.boxRate.text = "-"
-//        binding.tvReceivable.text = "-"
-//        binding.tvLastVisit.text = "-"
+
+       // binding.tvAreaName.text = shop.area_name
+        binding.tvLastVisit.text =
+            shop.last_visit?.let { formatDate(it) } ?: "Not visited"
+
+
+        binding.tvCashIn.text = "${shop.cash_in}"
+        binding.tvBorrowed.text = "${shop.borrowed}"
+        binding.tvRepaid.text = "${shop.repaid}"
+        binding.tvDiscountPerPatti.text = "${shop.discount_per_petti}"
+
+
+//        val damage = shop.damage_return
 //
-//        binding.tvCreditLimit.text = "-"
+//        // EXPIRE
+//        binding.etExpirePeti.text = damage.expire.peti.toString()
+//        binding.tvExpireTray.text = damage.expire.tray.toString()
+//        binding.tvExpireSingle.text = damage.expire.single.toString()
+//
+//        // RETURN
+//        binding.tvReturnPeti.text = damage.`return`.peti.toString()
+//        binding.tvReturnTray.text = damage.`return`.tray.toString()
+//        binding.tvReturnSingle.text = damage.`return`.single.toString()
+//
+//        // LIQUID
+//        binding.etLiquidKgs.text = damage.liquid.kg.toString()
+//        binding.tvLiquidTray.text = damage.liquid.tray.toString()
+//        binding.tvLiquidSingle.text = damage.liquid.single.toString()
 
-     //   binding.tvInitials.text = getInitials(shop.contact_person)
-
+        // SHOP IMAGE
         val imageUrl = shop.image
         if (!imageUrl.isNullOrEmpty()) {
             binding.imgShop.visibility = View.VISIBLE
-          //  binding.imgCamera.visibility = View.GONE
 
-            // Use full URL to show existing image
             val fullImageUrl = AppConstants.ImageURL + imageUrl
             Glide.with(this)
                 .load(fullImageUrl)
@@ -203,8 +264,6 @@ class ShopDetailsActivity : BaseActivity() {
                 .placeholder(binding.imgShop.drawable)
                 .into(binding.imgShop)
         }
-
-
     }
 
     private fun showError(response: retrofit2.Response<*>?) {
@@ -231,5 +290,13 @@ class ShopDetailsActivity : BaseActivity() {
             parts.size >= 2 -> "${parts[0][0]}${parts[1][0]}".uppercase()
             else -> parts[0][0].uppercase()
         }
+    }
+
+    fun formatDate(inputDate: String): String {
+        val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val outputFormat = java.text.SimpleDateFormat("dd MMM yyyy h:mm a", Locale.getDefault())
+
+        val date = inputFormat.parse(inputDate)
+        return outputFormat.format(date!!)
     }
 }

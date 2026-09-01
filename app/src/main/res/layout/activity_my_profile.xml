@@ -13,6 +13,7 @@
     android:background="@color/white"
     android:paddingBottom="20dp">
 
+
     <LinearLayout
         android:id="@+id/tLayout"
         android:layout_width="match_parent"
@@ -80,18 +81,18 @@
                 android:id="@+id/imgShop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                />
+                android:scaleType="centerCrop"/>
 
-            <!-- Camera Icon -->
-            <ImageView
-                android:id="@+id/imgCamera"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/adminshopdetailvector"
-                android:visibility="gone"
-                />
+            <!-- Initials Text -->
+            <TextView
+                android:id="@+id/tvInitials"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="-"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
 
         </FrameLayout>
 
@@ -109,9 +110,10 @@
 
 
         <TextView
+            android:id="@+id/tvUserType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Supplier"
+            android:text="-"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_marginStart="6dp"
@@ -137,7 +139,7 @@
 
 
             <TextView
-                android:id="@+id/capsuleText"
+                android:id="@+id/tvId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"
@@ -326,8 +328,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:visibility="gone"/>
+                    android:layout_marginRight="10dp" />
 
 
                 <LinearLayout
@@ -386,7 +387,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
-                                android:text="15 Mar 1995"
+                                android:text="-"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
@@ -414,8 +415,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:orientation="horizontal">
 
                     <!-- Status Icon -->
                     <androidx.cardview.widget.CardView
@@ -466,7 +466,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
-                                android:text="1 Jan 2025"
+                                android:text="-"
                                 android:textColor="@color/black"
                                 android:textStyle="bold"
                                 android:textSize="14sp"
@@ -581,7 +581,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -658,7 +659,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <!-- Status Icon -->
                     <androidx.cardview.widget.CardView

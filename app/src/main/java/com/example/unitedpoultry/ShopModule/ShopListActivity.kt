@@ -1,8 +1,10 @@
 package com.example.unitedpoultry.ShopModule
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.unitedpoultry.AdminShopModule.model.ShopModel
 import com.example.unitedpoultry.BaseActivity
 import com.example.unitedpoultry.R
@@ -27,6 +29,8 @@ class ShopListActivity : BaseActivity() {
     private var currentPage = 1
     private var lastPage = 1
     private var areaId: Int = 0
+    private var currentFilter = "all"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +41,7 @@ class ShopListActivity : BaseActivity() {
         configureStatusBar(isLightBackground = false, colorResId = R.color.primary)
 
         val name = intent.getStringExtra("AREA_NAME")
-        binding.tvAreaName.text = "$name Shops"
+        binding.tvAreaName.text = "$name"
         areaId = intent.getIntExtra("AREA_Id", 0)
 
         setupRecyclerView()
@@ -46,7 +50,6 @@ class ShopListActivity : BaseActivity() {
         setupClicks()
     }
 
-    // 🔥 ALWAYS refresh list when screen becomes visible
     override fun onResume() {
         super.onResume()
         resetAndFetch()
@@ -58,6 +61,43 @@ class ShopListActivity : BaseActivity() {
             finish()
         }
 
+        binding.filterAll.setOnClickListener {
+            applyFilter("all")
+        }
+
+        binding.filterVisited.setOnClickListener {
+            applyFilter("visited")
+        }
+
+        binding.filterPending.setOnClickListener {
+            applyFilter("pending")
+        }
+
+    }
+
+    private fun applyFilter(filter: String) {
+        if (currentFilter == filter) return
+
+        currentFilter = filter
+        highlightSelectedFilter(filter)
+        resetAndFetch()
+    }
+
+    private fun highlightSelectedFilter(filter: String) {
+
+        styleFilter(binding.filterAll, filter == "all")
+        styleFilter(binding.filterVisited, filter == "visited")
+        styleFilter(binding.filterPending, filter == "pending")
+    }
+
+    private fun styleFilter(view: TextView, isSelected: Boolean) {
+        if (isSelected) {
+            view.setTextColor(resources.getColor(android.R.color.white))
+            view.setBackgroundResource(R.drawable.filter_bg_selected)
+        } else {
+            view.setTextColor(resources.getColor(R.color.black60))
+            view.setBackgroundResource(R.drawable.filter_bg)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -72,7 +112,7 @@ class ShopListActivity : BaseActivity() {
 
         binding.rvShopList.layoutManager = LinearLayoutManager(this)
         binding.rvShopList.adapter = adapter
-        binding.rvShopList.isNestedScrollingEnabled = false
+
     }
 
     private fun setupSearch() {
@@ -83,15 +123,24 @@ class ShopListActivity : BaseActivity() {
     }
 
     private fun setupScrollPagination() {
-        binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            val view = binding.rvShopList.getChildAt(binding.rvShopList.childCount - 1)
-            if (view != null) {
-                val diff = view.bottom - (binding.nestedScrollView.height + scrollY)
-                if (diff <= 200 && !isLoading && currentPage < lastPage) {
+        val layoutManager = binding.rvShopList.layoutManager as LinearLayoutManager
+        binding.rvShopList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy <= 0) return // only scroll down
+
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                // Load more when near the end
+                if (!isLoading && currentPage < lastPage &&
+                    (visibleItemCount + firstVisibleItemPosition >= totalItemCount - 3)
+                ) {
                     fetchShops(currentPage + 1)
                 }
             }
-        }
+        })
     }
 
     // 🔁 Reset pagination + list
@@ -106,7 +155,7 @@ class ShopListActivity : BaseActivity() {
     private fun fetchShops(page: Int) {
         isLoading = true
 
-        viewModel.getRiderShops(areaId, page).observe(this) { apiResponse ->
+        viewModel.getRiderShops(areaId, page,currentFilter).observe(this) { apiResponse ->
 
             when (apiResponse.status) {
 
@@ -122,6 +171,14 @@ class ShopListActivity : BaseActivity() {
 
                     if (body?.result == "success" && body.data != null) {
 
+                        val counts = body.data.filter_counts
+
+                        binding.filterAll.text = "All(${counts.all})"
+                        binding.filterVisited.text = "Visited(${counts.visited})"
+                        binding.filterPending.text = "Pending(${counts.pending})"
+
+                        binding.capsuleText.text = "${body.data.total_shops_assigned} Shops Assigned"
+
                         lastPage = body.data.pagination.last_page
 
                         if (!body.data.shops.isNullOrEmpty()) {
@@ -130,7 +187,7 @@ class ShopListActivity : BaseActivity() {
                             shopList.addAll(body.data.shops)
                             adapter.updateList(shopList)
 
-                            binding.tvShopsCount.text = "${shopList.size} Shops"
+                         //   binding.tvShopsCount.text = "${shopList.size} Shops"
                             showEmptyState(false)
 
                         } else if (shopList.isEmpty()) {
@@ -141,7 +198,7 @@ class ShopListActivity : BaseActivity() {
 
                     } else {
                         if (shopList.isEmpty()) showEmptyState(true)
-                        showToast(body?.message ?: "No shops found")
+                       // showToast(body?.message ?: "No shops found")
                     }
                 }
 
@@ -149,7 +206,8 @@ class ShopListActivity : BaseActivity() {
                     if (page == 1) AppUtil.stopLoader()
                     isLoading = false
                     if (shopList.isEmpty()) showEmptyState(true)
-                    showToast(apiResponse.message ?: "Network error")
+                    //showToast(apiResponse.message ?: "Network error")
+                    showToast("Network problem")
                 }
             }
         }
@@ -162,7 +220,7 @@ class ShopListActivity : BaseActivity() {
         binding.rvShopList.visibility =
             if (show) android.view.View.GONE else android.view.View.VISIBLE
 
-        binding.tvShopsCount.visibility =
-            if (show) android.view.View.GONE else android.view.View.VISIBLE
+       // binding.tvShopsCount.visibility =
+          //  if (show) android.view.View.GONE else android.view.View.VISIBLE
     }
 }

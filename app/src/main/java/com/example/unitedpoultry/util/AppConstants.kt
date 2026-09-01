@@ -6,7 +6,10 @@ import com.example.unitedpoultry.Authentications.login.model.LoginResponseModel
 object AppConstants {
 
 
+    //var URL = "https://yearling-taking-length.ngrok-free.dev/"
     var URL = "http://202.166.170.246/united-poultry/"
+   // var URL = "https://yearling-taking-length.ngrok-free.dev/"
+
     var ImageURL = URL
 
     var BASE_URL = URL + "api/"

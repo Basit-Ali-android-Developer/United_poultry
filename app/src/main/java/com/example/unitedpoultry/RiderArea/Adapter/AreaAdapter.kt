@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -26,12 +27,23 @@ class AreaAdapter(
         val tvAreaName: TextView = itemView.findViewById(R.id.tvAreaName)
         val tvAreaAddress: TextView = itemView.findViewById(R.id.tvAreaAddress)
         val tvTotalShops: TextView = itemView.findViewById(R.id.tvTotalShops)
-//        val tvRiders: TextView = itemView.findViewById(R.id.tvRiders)
-//        val tvRecieveable: TextView = itemView.findViewById(R.id.tvRecieveable)
+
+        val tvVisitedToday: TextView = itemView.findViewById(R.id.tvVisitedToday)
+        val tvPending: TextView = itemView.findViewById(R.id.tvPending)
+
+
         val ivIcon: ImageView = itemView.findViewById(R.id.ivIcon)
         val iconContainer: CardView = itemView.findViewById(R.id.iconContainer)
         val ivNext: ImageView = itemView.findViewById(R.id.ivNext)
 //        val btnViewShops: MaterialButton = itemView.findViewById(R.id.btnViewShops)
+
+
+
+
+
+        val totalShopsLayout: LinearLayout = itemView.findViewById(R.id.totalShopsLayout)
+        val visitedTodayLayout: LinearLayout = itemView.findViewById(R.id.visitedTodayLayout)
+        val pendingLayout: LinearLayout = itemView.findViewById(R.id.pendingLayout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaViewHolder {
@@ -43,16 +55,28 @@ class AreaAdapter(
         val item = filteredList[position]
 
         holder.tvAreaName.text = item.name
-        holder.tvAreaAddress.text = "${item.city}, ${item.description}"
+        holder.tvAreaAddress.text = "${item.city}, ${item.description ?: ""}"
         holder.tvTotalShops.text = item.shops_count.toString()
-//        holder.tvRiders.text = "-"        // ignore for now
-//        holder.tvRecieveable.text = "-"
+        holder.tvVisitedToday.text = item.visited.toString()
+        holder.tvPending.text = item.pending.toString()
 
         val cardColor = cardColors[position % cardColors.size]
         val iconColor = iconColors[position % iconColors.size]
 
-        holder.iconContainer.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, cardColor))
-        holder.ivIcon.setColorFilter(ContextCompat.getColor(holder.itemView.context, iconColor))
+        holder.iconContainer.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, iconColor))
+       // holder.ivIcon.setColorFilter(ContextCompat.getColor(holder.itemView.context, iconColor))
+
+
+
+        holder.totalShopsLayout.background.setTint(
+            ContextCompat.getColor(holder.itemView.context, cardColor)
+        )
+        holder.visitedTodayLayout.background.setTint(
+            ContextCompat.getColor(holder.itemView.context, cardColor)
+        )
+        holder.pendingLayout.background.setTint(
+            ContextCompat.getColor(holder.itemView.context, cardColor)
+        )
 
 //        // Start EditAreaActivity normally
 //        holder.ivEdit.setOnClickListener {
@@ -90,7 +114,7 @@ class AreaAdapter(
         filteredList = if (query.isEmpty()) areaList.toMutableList()
         else areaList.filter {
             it.name.contains(query, true) ||
-                    it.description.contains(query, true) ||
+                  //  it.description.contains(query, true) ||
                     it.city.contains(query, true)
         }.toMutableList()
         notifyDataSetChanged()

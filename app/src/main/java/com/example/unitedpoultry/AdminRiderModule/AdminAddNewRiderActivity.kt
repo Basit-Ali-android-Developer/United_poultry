@@ -169,7 +169,7 @@ class AdminAddNewRiderActivity : BaseActivity() {
 
         if (selectedImageFile == null) {
             binding.etImageError.visibility = View.VISIBLE
-            binding.etImageError.text = "Shop image required"
+            binding.etImageError.text = "image required"
             valid = false
         }
 
@@ -179,7 +179,8 @@ class AdminAddNewRiderActivity : BaseActivity() {
             binding.etNameError.visibility = View.VISIBLE
             binding.etNameError.text = "Name required"
             valid = false
-        } else if (!Name.matches(Regex("^[a-zA-Z ]+$"))) {
+        }
+        else if (!Name.matches(Regex("^[a-zA-Z ]+$"))) {
             binding.etNameError.visibility = View.VISIBLE
             binding.etNameError.text = "Enter valid name"
             valid = false
@@ -221,17 +222,19 @@ class AdminAddNewRiderActivity : BaseActivity() {
             valid = false
         }
 
+
         val address = binding.etAddress.text.toString().trim()
 
         if (address.isEmpty()) {
             binding.etAddressError.visibility = View.VISIBLE
             binding.etAddressError.text = "Address required"
             valid = false
-        }else if (!address.matches(Regex(".*[a-zA-Z].*"))) {
-            binding.etAddressError.visibility = View.VISIBLE
-            binding.etAddressError.text = "Enter valid address"
-            valid = false
         }
+//        else if (!address.matches(Regex(".*[a-zA-Z].*"))) {
+//            binding.etAddressError.visibility = View.VISIBLE
+//            binding.etAddressError.text = "Enter valid address"
+//            valid = false
+//        }
 
         val username = binding.etUserName.text.toString().trim()
 
@@ -244,6 +247,7 @@ class AdminAddNewRiderActivity : BaseActivity() {
             binding.etUserNameError.text = "Enter valid username"
             valid = false
         }
+
 
 
         val password = binding.etPassword.text.toString().trim()
@@ -277,12 +281,24 @@ class AdminAddNewRiderActivity : BaseActivity() {
         val active = isActive.toRequestBody()
 
 
-        val imagePart = selectedImageFile?.let {
-            MultipartBody.Part.createFormData("image", it.name, it.asRequestBody("image/*".toMediaTypeOrNull()))
-        } ?: run {
-            Toast.makeText(this, "Image file not selected", Toast.LENGTH_SHORT).show()
-            return
+//        val imagePart = selectedImageFile?.let {
+//            MultipartBody.Part.createFormData("image", it.name, it.asRequestBody("image/*".toMediaTypeOrNull()))
+//        } ?: run {
+//            Toast.makeText(this, "Image file not selected", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+
+        // Create image part if selected, else null
+        val imagePart: MultipartBody.Part? = selectedImageFile?.let {
+            MultipartBody.Part.createFormData(
+                "image",
+                it.name,
+                it.asRequestBody("image/*".toMediaTypeOrNull())
+            )
         }
+
+// No need for Toast or return — image is optional
+
 
 //        val request = RiderRequestModel(
 //            name = binding.etName.text.toString().trim(),

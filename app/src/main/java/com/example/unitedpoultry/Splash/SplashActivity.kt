@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.example.unitedpoultry.AdminDashBoard.AdminDashBoardActivity
 import com.example.unitedpoultry.Authentications.AuthenticationActivity
 import com.example.unitedpoultry.Authentications.login.model.LoginResponseModel
@@ -16,7 +16,6 @@ import com.example.unitedpoultry.SessionManager
 import com.example.unitedpoultry.Welcome.WelcomeActivity
 import com.example.unitedpoultry.util.AppConstants
 import com.google.gson.Gson
-import kotlinx.coroutines.delay
 import org.koin.android.ext.android.inject
 
 class SplashActivity :  BaseActivity() {
@@ -28,16 +27,20 @@ class SplashActivity :  BaseActivity() {
     private lateinit var dot3: TextView
     private val handler = Handler(Looper.getMainLooper())
     private var dotIndex = 0
-    private val delay: Long = 400 // milliseconds
+    private val delay: Long = 400
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
         configureStatusBar(
-            isLightBackground = false, // false = white icons
+            isLightBackground = false,
             colorResId = R.color.primary
         )
+
+        if(intent.getIntExtra("response",0)==401){
+            sessionManager.logout()
+        }
 
         dot1 = findViewById(R.id.dot1)
         dot2 = findViewById(R.id.dot2)
@@ -75,16 +78,17 @@ class SplashActivity :  BaseActivity() {
 
     private fun navigateFunction(){
 
+        Log.d("SPLASH_DEBUG", "isFirstTime value is currently: ${sessionManager.isFirstTime()}")
+
         if (sessionManager.isLoggedIn()) {
             // setting token
             AppConstants.AUTH_TOKEN = sessionManager.getToken().toString()
 
             //  getting user info
-            AppConstants.userData =
-                Gson().fromJson( sessionManager.getUserInfo(), LoginResponseModel::class.java)
+            AppConstants.userData = Gson().fromJson( sessionManager.getUserInfo(), LoginResponseModel::class.java)
 
             if(AppConstants.userData!!.role_id == 1){
-                //startActivity(Intent(this@SplashActivity, AdminDashBoardActivity::class.java))
+
                 val intent = Intent(this@SplashActivity, AdminDashBoardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
@@ -92,7 +96,7 @@ class SplashActivity :  BaseActivity() {
 
 
             }else if (AppConstants.userData!!.role_id == 2){
-                //startActivity(Intent(this@SplashActivity, RiderDashBoardActivity::class.java))
+
 
                 val intent = Intent(this@SplashActivity, RiderDashBoardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -100,7 +104,16 @@ class SplashActivity :  BaseActivity() {
                 finish()
             }
         } else {
-            startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java))
+            // Check if the user is launching the app for the very first time
+            if (sessionManager.isFirstTime()) {
+                Log.d("SPLASH_DEBUG", "Routing to WelcomeActivity because isFirstTime is true")
+                sessionManager.setFirstTimeLaunch(false)
+                startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java))
+
+            } else {
+                Log.d("SPLASH_DEBUG", "Routing to AuthenticationActivity because isFirstTime is false")
+                startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
+            }
             finish()
         }
     }

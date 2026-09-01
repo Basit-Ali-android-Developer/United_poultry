@@ -2,6 +2,7 @@ package com.example.unitedpoultry.AdminSettingModule
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unitedpoultry.AdminSettingModule.DataModel.HistoryData
@@ -16,6 +17,7 @@ import com.example.unitedpoultry.util.showToast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.collections.mutableListOf
 import kotlin.getValue
+import androidx.core.widget.addTextChangedListener
 
 
 class AdminRateHistoryActivity : BaseActivity() {
@@ -32,7 +34,7 @@ class AdminRateHistoryActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize view binding
+
         binding = ActivityAdminRateHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -41,17 +43,14 @@ class AdminRateHistoryActivity : BaseActivity() {
             colorResId = android.R.color.white
         )
 
+        setupSearch()
 
 
-
-        with(binding) {
-
-
-            backArrow.setOnClickListener {
+        binding.backArrow.setOnClickListener {
                 finish()
-            }
-
         }
+
+
 
 
     }
@@ -60,6 +59,8 @@ class AdminRateHistoryActivity : BaseActivity() {
         super.onResume()
         getRateHistory()
     }
+
+
 
 
     private fun getRateHistory() {
@@ -78,6 +79,11 @@ class AdminRateHistoryActivity : BaseActivity() {
 
 
                             if (historyListData.isNotEmpty()) {
+
+                                binding.layoutEmpty.visibility = View.GONE
+                                binding.historyRv.visibility = View.VISIBLE
+
+
                                 for (ratesItem in historyListData) {
                                     val date = ratesItem.date
                                     for (item in ratesItem.rates!!) {
@@ -95,6 +101,12 @@ class AdminRateHistoryActivity : BaseActivity() {
                                     }
                                 }
                                 if (ratesList.isNotEmpty()) setupHistoryAdapter()
+                            }else {
+
+                                if (historyCurrentPage == 1) {
+                                    binding.layoutEmpty.visibility = View.VISIBLE
+                                    binding.historyRv.visibility = View.GONE
+                                }
                             }
 
                         }
@@ -103,7 +115,11 @@ class AdminRateHistoryActivity : BaseActivity() {
 
                     ERROR -> {
                         AppUtil.stopLoader()
-                        showToast(serverResponse.message.toString())
+                        showToast("Network Error")
+                        if (historyCurrentPage == 1) {
+                            binding.layoutEmpty.visibility = View.VISIBLE
+                            binding.historyRv.visibility = View.GONE
+                        }
                     }
 
                     LOADING -> {
@@ -130,16 +146,14 @@ class AdminRateHistoryActivity : BaseActivity() {
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                    // Check if we've reached the last item
+
                     if (lastVisibleItemPosition >= totalItemCount - 1) {
-                        // Load more data
+
                         if (historyCurrentPage < historyLastPage) {
                             loadMoreHistoryData()
                         }
 
                     }
-
-                    // Optional: Log for debugging
                     Log.v(
                         "ScrollInfo",
                         "First: $firstVisibleItemPosition, Last: $lastVisibleItemPosition, Total: $totalItemCount"
@@ -152,10 +166,27 @@ class AdminRateHistoryActivity : BaseActivity() {
 
 
     private fun loadMoreHistoryData() {
-        // Increment page and fetch more data
+
         historyCurrentPage++
         getRateHistory()
     }
 
 
+    private fun setupSearch() {
+
+        binding.etSearch.addTextChangedListener { editable ->
+
+            val query = editable.toString().trim()
+
+            rateHistoryAdapter.filter(query)
+
+            if (rateHistoryAdapter.itemCount == 0) {
+                binding.layoutEmpty.visibility = View.VISIBLE
+                binding.historyRv.visibility = View.GONE
+            } else {
+                binding.layoutEmpty.visibility = View.GONE
+                binding.historyRv.visibility = View.VISIBLE
+            }
+        }
+    }
 }

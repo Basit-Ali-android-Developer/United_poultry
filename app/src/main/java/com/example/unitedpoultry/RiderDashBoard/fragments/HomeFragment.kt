@@ -3,11 +3,11 @@ package com.example.unitedpoultry.RiderDashBoard.fragments
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,27 +21,23 @@ import com.example.unitedpoultry.rider_home.adapter.RiderHomeAdapter
 import com.example.unitedpoultry.databinding.FragmentHomeBinding
 import com.example.unitedpoultry.network.Status
 import com.example.unitedpoultry.network.retrofit.BaseResponse
-import com.example.unitedpoultry.rider_home.model.DailyPaymentStatsData
-import com.example.unitedpoultry.rider_home.model.EggPickupData
 import com.example.unitedpoultry.rider_home.viewmodel.DailyPaymentStatsViewModel
 import com.example.unitedpoultry.rider_home.viewmodel.DailyStatsViewModel
 import com.example.unitedpoultry.util.AppConstants.userData
 import com.example.unitedpoultry.util.AppUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.example.unitedpoultry.NewSale.Adapter.RiderProductHorizontalAdapter
 import com.example.unitedpoultry.NewSale.model.Product
-import com.example.unitedpoultry.NewSale.model.RiderProductData
 import com.example.unitedpoultry.NewSale.viewmodel.GetRiderProductViewModel
 import com.example.unitedpoultry.SessionManager
-import com.example.unitedpoultry.rider_home.model.ReturnWasteRequestModel
+import com.example.unitedpoultry.rider_expense.AddExpenseActivity
+import com.example.unitedpoultry.rider_home.adapter.RiderHomeStatsAdapter
+import com.example.unitedpoultry.rider_home.model.PickedToday
+import com.example.unitedpoultry.rider_home.model.PickedTodayProduct
 import com.example.unitedpoultry.rider_home.viewmodel.ReturnWasteViewModel
 import com.example.unitedpoultry.status_check.UserStatusChecker
 import com.example.unitedpoultry.status_check.viewmodel.UserStatusViewModel
 import com.example.unitedpoultry.util.AppConstants
-import com.example.unitedpoultry.waste_return.RiderProductReturnActivity
-import com.example.unitedpoultry.waste_return.RiderWasteProductActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
@@ -52,21 +48,17 @@ import java.util.Locale
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var shopAdapter: RiderHomeAdapter
-
-    private val ViewModel: DailyStatsViewModel by viewModel()
-    private val ViewModel1: DailyPaymentStatsViewModel by viewModel()
-    private val ViewModel2: ReturnWasteViewModel by viewModel()
     private val ViewModel3: GetRiderProductViewModel by viewModel()
     private val ViewModel4: UserStatusViewModel by viewModel()
-
-    private var productList = listOf<Product>()
-
-    private lateinit var productAdapter: RiderProductHorizontalAdapter
 
     private val riderViewModel: RiderDetailsViewModel by viewModel()
     private val sessionManager: SessionManager by inject()
 
+
+    private lateinit var totalPickedAdapter: RiderHomeStatsAdapter
+    private lateinit var remainingAdapter: RiderHomeStatsAdapter
+    private lateinit var expireAdapter: RiderHomeStatsAdapter
+    private lateinit var returnAdapter: RiderHomeStatsAdapter
 
 
     override fun onCreateView(
@@ -82,14 +74,13 @@ class HomeFragment : Fragment() {
 
         activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.primary)
 
-        // Optional: Change status bar icons to dark if needed
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity?.window?.decorView?.systemUiVisibility = 0 // light icons: 0, dark icons: View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            activity?.window?.decorView?.systemUiVisibility = 0
         }
 
         showData()
         onclick()
-       setupRecycler()
+        setupRecyclerViews()
 
 
     }
@@ -106,7 +97,7 @@ class HomeFragment : Fragment() {
 
     private fun refreshUserSession() {
 
-        val riderId = AppConstants.userData?.id ?: return
+        val riderId = userData?.id ?: return
 
         riderViewModel.getRiderDetails(riderId).observe(viewLifecycleOwner) { apiResponse ->
 
@@ -121,16 +112,15 @@ class HomeFragment : Fragment() {
                     if (response != null && response.isSuccessful) {
 
                         response.body()?.data?.let { riderModel ->
-                            // ✅ Map RiderModel to LoginResponseModel manually
+
                             val updatedUser = mapRiderToLoginResponse(riderModel)
 
-                            // Update runtime session
+
                             AppConstants.userData = updatedUser
 
-                            // Update local storage
+
                             sessionManager.userInfo(Gson().toJson(updatedUser))
 
-                            // Update UI
                             showData()
                         }
                     }
@@ -138,11 +128,7 @@ class HomeFragment : Fragment() {
 
                 Status.ERROR -> {
                     AppUtil.stopLoader()
-                    Toast.makeText(
-                        requireContext(),
-                        apiResponse.message ?: "Failed to refresh profile",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                   // Toast.makeText(requireContext(),"Failed to refresh profile", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -167,13 +153,10 @@ class HomeFragment : Fragment() {
     }
 
 
-
-
     private fun onclick(){
 
         binding.addEggsLayout.setOnClickListener {
 
-            // Call your reusable UserStatusChecker
             UserStatusChecker.check(
                 lifecycleOwner = viewLifecycleOwner,
                 viewModel = ViewModel4,
@@ -194,42 +177,42 @@ class HomeFragment : Fragment() {
         }
 
 
-//        binding.addEggsLayout.setOnClickListener{
-//
-//            val intent = Intent(requireContext(), EggPickupActivity::class.java)
-//            startActivity(intent)
-//        }
+        binding.addExpenseLayout.setOnClickListener{
 
-        binding.notifications.setOnClickListener {
-            val intent = Intent(requireContext(), NotificationActivity::class.java)
+            val intent = Intent(requireContext(), AddExpenseActivity::class.java)
             startActivity(intent)
         }
 
-        binding.openReturnDialog.setOnClickListener {
+//        binding.notifications.setOnClickListener {
+//            val intent = Intent(requireContext(), NotificationActivity::class.java)
+//            startActivity(intent)
+//        }
 
+//        binding.openReturnDialog.setOnClickListener {
+//
+//
+//            UserStatusChecker.check(
+//                lifecycleOwner = viewLifecycleOwner,
+//                viewModel = ViewModel4,
+//
+//                onActive = {
+//
+//                    showReturnWasteDialog()
+//                },
+//
+//                onInactive = {
+//                    Toast.makeText(requireContext(), "Your account is inactive. Contact admin.", Toast.LENGTH_LONG).show()
+//                },
+//
+//                onError = { message ->
+//                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+//                }
+//            )
+//
+//
+//        }
 
-            UserStatusChecker.check(
-                lifecycleOwner = viewLifecycleOwner,
-                viewModel = ViewModel4,
-
-                onActive = {
-
-                    showReturnWasteDialog()
-                },
-
-                onInactive = {
-                    Toast.makeText(requireContext(), "Your account is inactive. Contact admin.", Toast.LENGTH_LONG).show()
-                },
-
-                onError = { message ->
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                }
-            )
-
-
-        }
-
-        binding.areaShortCut.setOnClickListener {
+        binding.newSaleLayout.setOnClickListener {
             val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
             bottomNav.selectedItemId = R.id.nav_address
         }
@@ -240,213 +223,174 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        loadDailyStats()
-        loadDailyPaymentStats()
+       // loadDailyStats()
+      //  loadDailyPaymentStats()
         loadProducts()
         refreshUserSession()
     }
 
-    private fun loadDailyStats() {
+    private fun setupRecyclerViews() {
 
-        ViewModel.getDailyStats().observe(viewLifecycleOwner) { response ->
-            when (response.status) {
-                Status.LOADING -> AppUtil.startLoader(requireActivity())
+        totalPickedAdapter = RiderHomeStatsAdapter()
 
-                Status.SUCCESS -> {
-                    AppUtil.stopLoader()
-                    val res = response.data
-                    if (res != null && res.isSuccessful) {
-                        val baseResponse = res.body() as BaseResponse<EggPickupData>?
-                        baseResponse?.data?.let { data ->
-                           // binding.totalPicked.text = data.total_picked.toString()
-                            binding.totalSold.text = data.total_sold.toString()
-                            binding.totalReturned.text = data.total_returned.toString()
-                            binding.totalWaste.text = data.total_waste.toString()
-                        }
-                    }
-                }
+        binding.rvTotalPicked.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
 
-                Status.ERROR -> {
-                    AppUtil.stopLoader()
-                    Toast.makeText(
-                        requireContext(),
-                        response.message ?: "Network error",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+            adapter = totalPickedAdapter
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = false
+            overScrollMode = View.OVER_SCROLL_NEVER
+        }
+
+        remainingAdapter = RiderHomeStatsAdapter()
+
+        binding.rvRemaining.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = remainingAdapter
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = false
+            overScrollMode = View.OVER_SCROLL_NEVER
+        }
+
+
+        expireAdapter = RiderHomeStatsAdapter()
+
+        binding.rvExpire.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = expireAdapter
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = false
+            overScrollMode = View.OVER_SCROLL_NEVER
+        }
+
+
+
+        returnAdapter = RiderHomeStatsAdapter()
+
+        binding.rvReturn.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = returnAdapter
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = false
+            overScrollMode = View.OVER_SCROLL_NEVER
         }
     }
 
 
-    private fun loadDailyPaymentStats() {
-
-        ViewModel1.getDailyPaymentStats().observe(viewLifecycleOwner) { response ->
-            when (response.status) {
-                Status.LOADING -> AppUtil.startLoader(requireActivity())
-
-                Status.SUCCESS -> {
-                    AppUtil.stopLoader()
-                    val res = response.data
-                    if (res != null && res.isSuccessful) {
-                        val baseResponse = res.body() as BaseResponse<DailyPaymentStatsData>?
-                        baseResponse?.data?.let { data ->
-                           // binding.tvRecieved.text = "Rs ${data.today_total_cash_received}"
-
-//                            binding.tvTotalAmount.text = "Rs ${data.today_total_cash_received}"
-//                            binding.tvTotalSales.text = data.today_total_eggs_sold.toString()
-
-                            // Cash received (String → Double → formatted)
-                            val totalAmount = data.today_total_cash_received.toDoubleOrNull() ?: 0.0
-                            binding.tvTotalAmount.text = "Rs ${formatNumber(totalAmount)}"
-
-                            binding.tvTotalSales.text = formatNumber(data.today_total_eggs_sold)
-
-
-                            // binding.totalWaste.text = data.todayTotalEggsWaste.toString()
-                        }
-                    }
-                }
-
-                Status.ERROR -> {
-                    AppUtil.stopLoader()
-                    Toast.makeText(
-                        requireContext(),
-                        response.message ?: "Network error",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-    }
-
-    private fun showReturnWasteDialog() {
-
-        val dialogView = layoutInflater.inflate(R.layout.dialog_egg_return, null)
-
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView)
-            .setCancelable(true)
-            .create()
-
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-        val btnReturn = dialogView.findViewById<MaterialButton>(R.id.btnReturn)
-        val btnWaste = dialogView.findViewById<MaterialButton>(R.id.btnWaste)
-
-        // 👉 OPEN RETURN ACTIVITY
-        btnReturn.setOnClickListener {
-            val intent = Intent(requireContext(), RiderProductReturnActivity::class.java)
-            startActivity(intent)
-            dialog.dismiss()
-        }
-
-
-        btnWaste.setOnClickListener {
-            val intent = Intent(requireContext(), RiderWasteProductActivity::class.java)
-            startActivity(intent)
-            dialog.dismiss()
-        }
-
-        dialog.show()
-    }
-
-
-
-
-    private fun hitReturnWasteApi(returnCount: Int, wasteCount: Int) {
-
-        val todayDate = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
-        // Show loader if needed
-        AppUtil.startLoader(requireActivity())
-
-        val request = ReturnWasteRequestModel(
-            returned = returnCount,
-            waste = wasteCount,
-            date = todayDate.toString().trim(),
-        )
-
-        // Example: ViewModel function to hit API
-        ViewModel2.submitReturnWaste(request).observe(viewLifecycleOwner) { response ->
-            when (response.status) {
-                Status.LOADING -> AppUtil.startLoader(requireActivity())
-                Status.SUCCESS -> {
-                    AppUtil.stopLoader()
-                    Toast.makeText(requireContext(), "Submitted successfully", Toast.LENGTH_SHORT).show()
-                    // Optionally, refresh your daily stats
-
-                    loadDailyStats()
-                    loadDailyPaymentStats()
-                    loadProducts()
-                }
-                Status.ERROR -> {
-                    AppUtil.stopLoader()
-                    Toast.makeText(requireContext(), response.message ?: "Network error", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun setupRecycler() {
-        productAdapter = RiderProductHorizontalAdapter()
-        binding.recyclerProducts.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerProducts.adapter = productAdapter
-    }
 
     private fun loadProducts() {
         ViewModel3.getRiderProducts().observe(viewLifecycleOwner) { response ->
             when (response.status) {
-                Status.LOADING -> { /* show loader if needed */ }
+
+                Status.LOADING -> {  }
 
                 Status.SUCCESS -> {
                     val res = response.data
                     if (res != null && res.isSuccessful) {
-                        val baseResponse = res.body() as BaseResponse<RiderProductData>?
-                        if (baseResponse?.result == "success" && baseResponse.data != null) {
 
-                            val products = baseResponse.data.picked_items
+                        val baseResponse = res.body() as BaseResponse<PickedToday>?
+                        val data = baseResponse?.data
 
-                            if (products.isNullOrEmpty()) {
-                                showProductEmptyState(true)
-                            } else {
-                                showProductEmptyState(false)
-                                productAdapter.submitList(products)
-
-                                val totalEggsSum = products.sumOf { it.total_eggs }
-                               // val total = formatNumber(totalEggsSum)
-                                binding.tvTotalEggs.text = "Eggs  ${totalEggsSum}"
-                            }
-
-                        } else {
-                            showProductEmptyState(true)
-                            Toast.makeText(
-                                requireContext(),
-                                baseResponse?.message ?: "Failed to fetch products",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        if (baseResponse?.result == "success" && data != null) {
+                           // showProductEmptyState(false)
+                            bindPickedItemsData(data)
                         }
-                    } else {
-                        showProductEmptyState(true)
+
                     }
+//                    else showProductEmptyState(true)
                 }
 
                 Status.ERROR -> {
-                    showProductEmptyState(true)
-                    Toast.makeText(
-                        requireContext(),
-                        response.message ?: "Network Error",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    //showProductEmptyState(true)
+                    Toast.makeText(requireContext(),"Network connection problem. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    private fun showProductEmptyState(show: Boolean) {
-        binding.layoutEmpty.visibility = if (show) View.VISIBLE else View.GONE
-        binding.recyclerProducts.visibility = if (show) View.GONE else View.VISIBLE
+
+    private fun toggleSection(
+        recyclerView: View,
+        emptyView: View,
+        hasData: Boolean
+    ) {
+        recyclerView.visibility = if (hasData) View.VISIBLE else View.GONE
+        emptyView.visibility = if (hasData) View.GONE else View.VISIBLE
     }
+
+
+
+
+
+    private fun bindPickedItemsData(data: PickedToday) {
+
+        val rawTotalPickedList = data.total_picked.map { it.key to it.value }
+        val rawRemainingList = data.remaining.map { it.key to it.value }
+        val rawExpireList = data.categories.expire.map { it.key to it.value }
+        val rawReturnList = data.categories.`return`.map { it.key to it.value }
+
+        // Convert raw trays into Pettis + Remaining Trays for ALL lists
+        val totalPickedList = convertTraysToPettiAndTrays(rawTotalPickedList)
+        val remainingList = convertTraysToPettiAndTrays(rawRemainingList)
+        val expireList = convertTraysToPettiAndTrays(rawExpireList)
+        val returnList = convertTraysToPettiAndTrays(rawReturnList)
+
+        binding.tvLiquidQuantity.text = data.categories.liquid.kg.toString()
+
+        totalPickedAdapter.submitList(totalPickedList)
+        remainingAdapter.submitList(remainingList)
+        expireAdapter.submitList(expireList)
+        returnAdapter.submitList(returnList)
+
+        toggleSection(binding.rvTotalPicked, binding.emptyTotalPicked, totalPickedList.isNotEmpty())
+        toggleSection(binding.rvRemaining, binding.emptyRemaining, remainingList.isNotEmpty())
+        toggleSection(binding.rvExpire, binding.emptyExpire, expireList.isNotEmpty())
+        toggleSection(binding.rvReturn, binding.emptyReturn, returnList.isNotEmpty())
+    }
+
+    private fun convertTraysToPettiAndTrays(list: List<Pair<String, Int>>): List<Pair<String, Int>> {
+        val result = mutableListOf<Pair<String, Int>>()
+        var pettiCount = 0
+
+        for ((key, count) in list) {
+            if (count <= 0) continue // Skip 0 items
+
+            if (key.contains("tray", ignoreCase = true)) {
+                pettiCount += count / 12
+                val remainingTrays = count % 12
+
+                if (remainingTrays > 0) {
+                    result.add(key to remainingTrays)
+                }
+            } else {
+                result.add(key to count)
+            }
+        }
+
+        // Insert Petti at the top if any exist (1 Petti = 12 Trays)
+        if (pettiCount > 0) {
+            result.add(0, "Petti" to pettiCount)
+        }
+
+        return result
+    }
+
 
     private fun getTodayDate(): String {
         val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())

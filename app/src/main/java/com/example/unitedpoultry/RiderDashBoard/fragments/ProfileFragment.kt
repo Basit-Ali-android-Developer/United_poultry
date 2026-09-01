@@ -23,6 +23,7 @@ import com.example.unitedpoultry.databinding.FragmentProfileBinding
 import com.example.unitedpoultry.status_check.UserStatusChecker
 import com.example.unitedpoultry.status_check.viewmodel.UserStatusViewModel
 import com.example.unitedpoultry.util.AppConstants.userData
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,47 +47,55 @@ class ProfileFragment : Fragment() {
 
 
         onclick()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkStatus()
         showData()
+
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//       // checkStatus()
+//
+//    }
 
     private fun showData(){
 
         binding.tvName.text = userData?.username ?: "User Name"
 
-
-
-
         binding.tvInitials.text = getInitials(userData?.username ?: "User Name")
 
+        binding.tvId.text = "ID: ${userData?.id ?: 0}"
+
+        val type = userData?.role_id ?: 0
+
+        if(type == 2){
+            binding.tvUserType.text = "Delivery Rider"
+        }else{
+            binding.tvUserType.text = "Admin"
+        }
+
     }
 
-    private fun checkStatus(){
-
-        UserStatusChecker.check(
-            lifecycleOwner = viewLifecycleOwner,
-            viewModel = ViewModel4,
-
-            onActive = {
-
-                binding.capsuleText.text = "Active"
-            },
-
-            onInactive = {
-
-                binding.capsuleText.text = "Inactive"
-            },
-
-            onError = { message ->
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-            }
-        )
-    }
+//    private fun checkStatus(){
+//
+//        UserStatusChecker.check(
+//            lifecycleOwner = viewLifecycleOwner,
+//            viewModel = ViewModel4,
+//
+//            onActive = {
+//
+//                binding.capsuleText.text = "Active"
+//            },
+//
+//            onInactive = {
+//
+//                binding.capsuleText.text = "Inactive"
+//            },
+//
+//            onError = { message ->
+//                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+//            }
+//        )
+//    }
 
     private fun  onclick(){
 
@@ -99,7 +108,7 @@ class ProfileFragment : Fragment() {
                 .setCancelable(true)
                 .create()
 
-            // 🔥 THIS LINE FIXES THE EDGES
+
             dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
             val btnCancel = dialogView.findViewById<MaterialButton>(R.id.btnCancel)
@@ -124,23 +133,20 @@ class ProfileFragment : Fragment() {
             dialog.show()
         }
 
-
-
-
         binding.myProfileCard.setOnClickListener {
             val intent = Intent(requireContext(), MyProfileActivity::class.java)
             startActivity(intent)
         }
 
-//        binding.cardChangePassword.setOnClickListener {
-//            val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
-//            startActivity(intent)
-//        }
+        binding.changePasswordCard.setOnClickListener {
+            val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
+            startActivity(intent)
+        }
 
-//        binding.cardMyPerformance.setOnClickListener {
-//            val intent = Intent(requireContext(), MyPerformanceActivity::class.java)
-//            startActivity(intent)
-//        }
+        binding.assignedAreas.setOnClickListener {
+            val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+            bottomNav.selectedItemId = R.id.nav_address
+        }
 
     }
 

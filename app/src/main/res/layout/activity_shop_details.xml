@@ -33,7 +33,7 @@
             android:id="@+id/tLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -133,6 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:text="Shop Name"
             android:gravity="center"
             android:fontFamily="@font/poppins"
             android:textColor="@color/white"
@@ -147,6 +148,7 @@
             android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="shop address"
             android:textSize="12sp"
             android:textColor="@color/white"
             android:fontFamily="@font/poppins"
@@ -171,17 +173,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp"
-                android:visibility="gone">
+                android:padding="10dp">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardBoxes"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="120dp"
+                    android:layout_height="100dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="6dp"
+                    app:cardElevation="2dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginStart="2dp"
                     android:backgroundTint="@color/white">
 
                     <LinearLayout
@@ -189,27 +191,30 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:paddingTop="10dp">
+                        android:paddingTop="5dp">
 
                         <TextView
-                            android:id="@+id/boxRate"
+                            android:id="@+id/tvCashIn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="-"
                             android:fontFamily="@font/poppins"
                             android:textColor="@color/primary"
-                            android:textSize="18sp"
+                            android:textSize="13sp"
                             android:textStyle="bold"
+                            android:gravity="center"
                             android:layout_gravity="center_horizontal"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="Rate/Box"
+                            android:text="Cash In"
                             android:textColor="@color/black75"
-                            android:textSize="12sp"
+                            android:textSize="10sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="3dp"
+                            android:gravity="center"
                             android:layout_gravity="center_horizontal"/>
 
                     </LinearLayout>
@@ -222,9 +227,9 @@
                     android:id="@+id/cardBoxRate"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="120dp"
+                    android:layout_height="100dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="6dp"
+                    app:cardElevation="2dp"
                     android:layout_marginLeft="10dp"
                     android:backgroundTint="@color/white">
 
@@ -233,27 +238,29 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:paddingTop="10dp">
+                        android:paddingTop="5dp">
 
                         <TextView
-                            android:id="@+id/tvDiscount"
+                            android:id="@+id/tvBorrowed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="-"
                             android:fontFamily="@font/poppins"
                             android:textColor="@color/primary"
-                            android:textSize="18sp"
+                            android:textSize="13sp"
                             android:textStyle="bold"
+                            android:gravity="center"
                             android:layout_gravity="center_horizontal"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="Discount           (less than)"
+                            android:text="Borrowed"
                             android:textColor="@color/black75"
-                            android:textSize="12sp"
+                            android:textSize="10sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="3dp"
                             android:gravity="center"
                             android:layout_gravity="center_horizontal"/>
 
@@ -267,9 +274,9 @@
                     android:id="@+id/cardDiscount"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="120dp"
+                    android:layout_height="100dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="6dp"
+                    app:cardElevation="2dp"
                     android:layout_marginLeft="10dp"
                     android:backgroundTint="@color/white">
 
@@ -278,27 +285,30 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:paddingTop="10dp">
+                        android:paddingTop="5dp">
 
                         <TextView
-                            android:id="@+id/tvReceivable"
+                            android:id="@+id/tvDiscountPerPatti"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="-"
                             android:fontFamily="@font/poppins"
-                            android:textColor="@color/red"
-                            android:textSize="18sp"
+                            android:textColor="@color/primary"
+                            android:textSize="13sp"
                             android:textStyle="bold"
+                            android:gravity="center"
                             android:layout_gravity="center_horizontal"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="Due Amount"
+                            android:text="Discount \n per petti "
                             android:textColor="@color/black75"
-                            android:textSize="12sp"
+                            android:textSize="10sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="3dp"
+                            android:gravity="center"
                             android:layout_gravity="center_horizontal"/>
 
                     </LinearLayout>
@@ -306,6 +316,54 @@
 
 
                 </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="2dp"
+                    android:backgroundTint="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:id="@+id/tvRepaid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:fontFamily="@font/poppins"
+                            android:textColor="@color/red"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:text="Repaid"
+                            android:textColor="@color/black75"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="3dp"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal"/>
+
+                    </LinearLayout>
+
+
+
+                </androidx.cardview.widget.CardView>
+
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
@@ -371,6 +429,7 @@
                                 android:id="@+id/tvContactName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="-"
                                 android:fontFamily="@font/poppins"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
@@ -428,6 +487,7 @@
                                 android:id="@+id/tvPhoneNumber"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="-"
                                 android:fontFamily="@font/poppins"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
@@ -455,8 +515,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="60dp"
@@ -486,6 +545,7 @@
                                 android:id="@+id/tvLastVisit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="-"
                                 android:fontFamily="@font/poppins"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
@@ -516,6 +576,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         >
 
                         <ImageView
@@ -537,15 +598,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
-                                android:text="Discount"
+                                android:text="Credit Limit"
                                 android:textColor="@color/black75"
                                 android:textSize="12sp"
                                 android:layout_marginTop="15dp" />
 
                             <TextView
-                                android:id="@+id/tvDiscountPerPatti"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="Rs. 50,000"
                                 android:fontFamily="@font/poppins"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
@@ -568,6 +629,648 @@
 
 
             </androidx.cardview.widget.CardView>
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:cardCornerRadius="12dp"-->
+<!--                app:cardElevation="6dp"-->
+<!--                android:layout_marginStart="4dp"-->
+<!--                android:layout_marginEnd="4dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginBottom="10dp">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:paddingStart="5dp"-->
+<!--                    android:paddingEnd="5dp"-->
+<!--                    android:paddingTop="15dp"-->
+<!--                    android:paddingBottom="15dp">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:layout_marginLeft="10dp">-->
+
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="20dp"-->
+<!--                            android:layout_height="20dp"-->
+<!--                            android:layout_marginEnd="10dp"-->
+<!--                            android:background="@drawable/square_white"-->
+<!--                            android:contentDescription="Status"-->
+<!--                            android:src="@drawable/filesvg"-->
+<!--                            android:layout_gravity="center_vertical"/>-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:fontFamily="@font/poppins"-->
+<!--                            android:text="Damage/Return"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="18sp"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:layout_marginLeft="5dp"-->
+<!--                            android:layout_marginTop="5dp"/>-->
+
+
+
+<!--                    </LinearLayout>-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:background="@drawable/rounded_bg_pink"-->
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        android:paddingStart="10dp"-->
+<!--                        android:paddingTop="10dp"-->
+<!--                        android:paddingBottom="10dp"-->
+<!--                        android:paddingEnd="3dp">-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            android:gravity="center_vertical">-->
+
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:id="@+id/iconContainer"-->
+<!--                                android:layout_width="30dp"-->
+<!--                                android:layout_height="30dp"-->
+<!--                                app:cardCornerRadius="12dp"-->
+<!--                                app:cardElevation="0dp"-->
+<!--                                android:backgroundTint="@color/pink_lite_shade1">-->
+
+<!--                                <ImageView-->
+<!--                                    android:id="@+id/ivIcon"-->
+<!--                                    android:layout_width="15dp"-->
+<!--                                    android:layout_height="15dp"-->
+<!--                                    android:src="@drawable/clocksvg"-->
+<!--                                    app:tint="@color/red"-->
+<!--                                    android:layout_gravity="center"/>-->
+<!--                            </androidx.cardview.widget.CardView>-->
+
+
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:layout_marginStart="10dp">-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/tvAreaName"-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:fontFamily="@font/poppins"-->
+<!--                                    android:text="Expire"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:textSize="13sp"-->
+<!--                                    android:textStyle="bold"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/tvAreaAddress"-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:fontFamily="@font/poppins"-->
+<!--                                    android:text="Expired eggs"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:textSize="11sp"/>-->
+<!--                            </LinearLayout>-->
+
+<!--                            &lt;!&ndash; PETI &ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center"-->
+<!--                                android:padding="2dp">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="Peti"-->
+<!--                                    android:textColor="@color/red"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:textSize="12sp"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/etExpirePeti"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="-"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginTop="4dp"-->
+<!--                                    android:textColor="@color/black60"-->
+<!--                                    android:background="@drawable/edit_text_bg_no_border"-->
+<!--                                    android:gravity="center"/>-->
+<!--                            </LinearLayout>-->
+
+<!--                            &lt;!&ndash; TRAY &ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center"-->
+<!--                                android:padding="2dp">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="Tray"-->
+<!--                                    android:textColor="@color/red"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:textSize="12sp"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/tvExpireTray"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="-"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginTop="4dp"-->
+<!--                                    android:textColor="@color/black60"-->
+<!--                                    android:background="@drawable/edit_text_bg_no_border"-->
+<!--                                    android:gravity="center"/>-->
+<!--                            </LinearLayout>-->
+
+<!--                            &lt;!&ndash; EGG &ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center"-->
+<!--                                android:padding="2dp">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="Egg"-->
+<!--                                    android:textColor="@color/red"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:textSize="12sp"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/tvExpireSingle"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="-"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginTop="4dp"-->
+<!--                                    android:textColor="@color/black60"-->
+<!--                                    android:background="@drawable/edit_text_bg_no_border"-->
+<!--                                    android:gravity="center"/>-->
+<!--                            </LinearLayout>-->
+
+<!--                        </LinearLayout>-->
+<!--                    </LinearLayout>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:background="@drawable/rounded_bg_orange"-->
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        android:padding="10dp">-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            android:gravity="center_vertical">-->
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="30dp"-->
+<!--                                android:layout_height="30dp"-->
+<!--                                app:cardCornerRadius="12dp"-->
+<!--                                app:cardElevation="0dp"-->
+<!--                                android:backgroundTint="@color/orange_lite_shade1"-->
+<!--                                android:layout_gravity="center">-->
+
+<!--                                <ImageView-->
+<!--                                    android:layout_width="15dp"-->
+<!--                                    android:layout_height="15dp"-->
+<!--                                    android:src="@drawable/backarrow2"-->
+<!--                                    app:tint="@color/sub_primary"-->
+<!--                                    android:layout_gravity="center"/>-->
+<!--                            </androidx.cardview.widget.CardView>-->
+
+
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:fontFamily="@font/poppins"-->
+<!--                                    android:text="Return"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:textSize="13sp"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:layout_marginLeft="5dp"-->
+<!--                                    android:layout_marginTop="5dp" />-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:fontFamily="@font/poppins"-->
+<!--                                    android:text="Good eggs"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginLeft="5dp"/>-->
+
+<!--                            </LinearLayout>-->
+
+
+<!--                            &lt;!&ndash; PETI &ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center"-->
+<!--                                android:padding="2dp">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="Peti"-->
+<!--                                    android:textColor="@color/sub_primary"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:textSize="12sp"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/tvReturnPeti"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="-"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginTop="4dp"-->
+<!--                                    android:textColor="@color/black60"-->
+<!--                                    android:background="@drawable/edit_text_bg_no_border"-->
+<!--                                    android:gravity="center"/>-->
+<!--                            </LinearLayout>-->
+
+<!--                            &lt;!&ndash; TRAY &ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center"-->
+<!--                                android:padding="2dp">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="Tray"-->
+<!--                                    android:textColor="@color/sub_primary"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:textSize="12sp"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/tvReturnTray"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="-"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginTop="4dp"-->
+<!--                                    android:textColor="@color/black60"-->
+<!--                                    android:background="@drawable/edit_text_bg_no_border"-->
+<!--                                    android:gravity="center"/>-->
+<!--                            </LinearLayout>-->
+
+<!--                            &lt;!&ndash; EGG &ndash;&gt;-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center"-->
+<!--                                android:padding="2dp">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="Egg"-->
+<!--                                    android:textColor="@color/sub_primary"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:textSize="12sp"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/tvReturnSingle"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="-"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginTop="4dp"-->
+<!--                                    android:textColor="@color/black60"-->
+<!--                                    android:background="@drawable/edit_text_bg_no_border"-->
+<!--                                    android:gravity="center"/>-->
+<!--                            </LinearLayout>-->
+
+<!--                        </LinearLayout>-->
+<!--                    </LinearLayout>-->
+
+<!--&lt;!&ndash;                    <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:orientation="vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:background="@drawable/rounded_bg_blue"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_marginTop="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:paddingStart="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:paddingEnd="3dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:paddingTop="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:paddingBottom="10dp">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:gravity="center_vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:orientation="horizontal">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            &lt;!&ndash; Status Icon &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                            <androidx.cardview.widget.CardView&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_width="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_height="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                app:cardCornerRadius="12dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                app:cardElevation="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:backgroundTint="@color/blue_lite_shade1"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_gravity="center">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="15dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="15dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:src="@drawable/liquidsvg"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    app:tint="@color/blue"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_gravity="center"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </androidx.cardview.widget.CardView>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:orientation="horizontal"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_marginLeft="10dp">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:orientation="vertical">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                    <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:fontFamily="@font/poppins"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:text="Liquid"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:textColor="@color/black"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:textSize="13sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:textStyle="bold"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:layout_marginLeft="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:layout_marginTop="5dp" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                    <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:fontFamily="@font/poppins"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:text="broken"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:textColor="@color/black"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:textSize="11sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        android:layout_marginLeft="5dp"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                </LinearLayout>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            </LinearLayout>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:orientation="vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:paddingStart="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:paddingEnd="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:gravity="center">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginTop="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textStyle="bold"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:text="Peti"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:fontFamily="@font/poppins"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textSize="12sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textColor="@color/blue"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:id="@+id/tvLiquidPeti"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="70dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginTop="4dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:background="@drawable/edit_text_bg_no_border"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:fontFamily="@font/poppins"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textColor="@color/black60"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textSize="11sp" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            </LinearLayout>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:orientation="vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:paddingStart="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:paddingEnd="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:gravity="center">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginTop="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textStyle="bold"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:text="Tray"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:fontFamily="@font/poppins"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textSize="12sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textColor="@color/blue"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:id="@+id/tvLiquidTray"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="70dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginTop="4dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:background="@drawable/edit_text_bg_no_border"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:fontFamily="@font/poppins"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textColor="@color/black60"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textSize="11sp" />&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                            </LinearLayout>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:orientation="vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:paddingStart="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:paddingEnd="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:gravity="center">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginTop="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textStyle="bold"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:text="Egg"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:fontFamily="@font/poppins"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textSize="12sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textColor="@color/blue"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:id="@+id/tvLiquidSingle"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="70dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginTop="4dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:background="@drawable/edit_text_bg_no_border"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:fontFamily="@font/poppins"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textColor="@color/black60"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textSize="11sp" />&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                            </LinearLayout>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                        </LinearLayout>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    </LinearLayout>&ndash;&gt;-->
+
+
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:background="@drawable/rounded_bg_blue"-->
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        android:padding="10dp">-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            android:gravity="center_vertical">-->
+
+<!--                            <androidx.cardview.widget.CardView-->
+<!--                                android:layout_width="30dp"-->
+<!--                                android:layout_height="30dp"-->
+<!--                                app:cardCornerRadius="12dp"-->
+<!--                                app:cardElevation="0dp"-->
+<!--                                android:backgroundTint="@color/blue_lite_shade1"-->
+<!--                                android:layout_gravity="center">-->
+
+<!--                                <ImageView-->
+<!--                                    android:layout_width="15dp"-->
+<!--                                    android:layout_height="15dp"-->
+<!--                                    android:src="@drawable/liquidsvg"-->
+<!--                                    app:tint="@color/blue"-->
+<!--                                    android:layout_gravity="center"/>-->
+<!--                            </androidx.cardview.widget.CardView>-->
+
+
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="2"-->
+<!--                                android:orientation="vertical">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:fontFamily="@font/poppins"-->
+<!--                                    android:text="Liquid"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:textSize="13sp"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:layout_marginLeft="5dp"-->
+<!--                                    android:layout_marginTop="5dp" />-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:fontFamily="@font/poppins"-->
+<!--                                    android:text="Damaged/broken eggs"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginLeft="5dp"/>-->
+
+<!--                            </LinearLayout>-->
+
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="0dp"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center"-->
+<!--                                android:padding="2dp">-->
+
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="Kgs"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:textColor="@color/blue"-->
+<!--                                    android:textSize="12sp"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/etLiquidKgs"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="-"-->
+<!--                                    android:textSize="11sp"-->
+<!--                                    android:layout_marginTop="4dp"-->
+<!--                                    android:textColor="@color/black60"-->
+<!--                                    android:background="@drawable/edit_text_bg_no_border"-->
+<!--                                    android:gravity="center"/>-->
+<!--                            </LinearLayout>-->
+
+<!--                        </LinearLayout>-->
+
+
+<!--                    </LinearLayout>-->
+
+
+
+<!--                </LinearLayout>-->
+
+
+
+
+<!--            </androidx.cardview.widget.CardView>-->
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -616,44 +1319,48 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="50dp">
 
+
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnNewSale"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
                     android:text="New Sale"
+                    android:layout_weight="1"
                     android:textAllCaps="false"
-                    android:textSize="16sp"
+                    android:textSize="10sp"
                     android:textStyle="bold"
+                    app:icon="@drawable/circleaddsvg"
                     android:textColor="@color/white"
                     android:background="@drawable/btn_continue_bg"
                     app:backgroundTint="@null"
+                    app:iconTint="@null"
+                    app:iconGravity="textStart"
                     android:fontFamily="@font/poppins"
-                    android:layout_marginRight="10dp"
-                    />
-
+                    android:layout_marginEnd="10dp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCollectPayment"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:text="collect Payment"
                     android:layout_weight="1"
-                    android:text="Collect Payment"
                     android:textAllCaps="false"
-                    android:textSize="16sp"
+                    android:textSize="10sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/poppins"
-
-                    app:icon="@drawable/collectvector"
-                    app:iconTint="@color/white"
-                    app:iconGravity="textStart"
-                    app:iconPadding="12dp"
-
                     android:background="@drawable/btn_subprimary_bg"
                     app:backgroundTint="@null"
-                    android:visibility="gone"
+                    app:icon="@drawable/collect_vector_svg"
+                    app:iconTint="@color/white"
+                    android:fontFamily="@font/poppins"
                     />
+
+
+
+
+
+
 
 
 
