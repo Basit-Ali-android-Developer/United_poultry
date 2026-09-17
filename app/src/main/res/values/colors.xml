@@ -23,6 +23,7 @@
     <color name="white20">#33FFFFFF</color>
 
     <color name="primary">#1D7A84</color>
+    <color name="primaryDark">#125056</color>
     <color name="primary20">#331D7A84</color>
     <color name="primaryLight">#261D7A84</color>
     <color name="primary9">#EBF3F4</color>

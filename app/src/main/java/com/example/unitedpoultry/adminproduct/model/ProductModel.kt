@@ -6,7 +6,8 @@ data class Product(
     val packing: String,
     val eggs_count: Int,
     val price: String,
-    val is_active: Int
+    val is_active: Int,
+    var picked_quantity: Int=0
 
 )
 

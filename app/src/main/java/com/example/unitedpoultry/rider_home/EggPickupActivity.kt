@@ -70,18 +70,40 @@ class EggPickupActivity : BaseActivity() {
                             val mutableProducts = baseResponse.data.products.toMutableList()
 
 
-                            val pettiItem = Product(
+                            /*val pettiItem = Product(
                                 id = -1,
-                                name = "Petti",
-                                packing = "Petti",
+                                name = "Pettiii",
+                                packing = "Pettiii",
                                 eggs_count = 360,
                                 price = "0",
                                 is_active = 1
                             )
-                            mutableProducts.add(pettiItem)
+                            mutableProducts.add(pettiItem)*/
 
 
                             productList = mutableProducts
+                            var pettiCount = 0
+                            for (item in productList) {
+                                if (item.name.contains("Tray", ignoreCase = true) ) {
+                                    pettiCount += item.picked_quantity / 12
+                                    var remainingTrays = item.picked_quantity % 12
+                                    item.picked_quantity= remainingTrays
+                                }
+                            }
+                            for (item in productList) {
+                                if (item.name.contains("Petti", ignoreCase = true) ) {
+                                    item.picked_quantity= pettiCount
+                                }
+                            }
+
+
+
+
+
+
+
+
+
                             binding.recyclerProducts.adapter = EggPickUpAdapter(productList, quantityMap)
 
                         } else {

@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -220,7 +221,7 @@ class SaleFormActivity : BaseActivity() {
                         val baseResponse = res.body() as BaseResponse<PickedToday>?
 
                         if (baseResponse?.result == "success" && baseResponse.data != null) {
-
+                            Log.d("loadProducts", "loadProducts: ${baseResponse.data}")
                             val data = baseResponse.data
                             val remainingMap = data.remaining
 
@@ -228,13 +229,19 @@ class SaleFormActivity : BaseActivity() {
 
                             // 1. Extract Base Tray Information
                             val trayProduct = data.products.find { it.name.equals("Tray", ignoreCase = true) }
+                            Log.d("loadProducts", "trayProduct: ${trayProduct}")
                             val baseTrayPrice = trayProduct?.latest_price ?: 0.0
+                            Log.d("loadProducts", "baseTrayPrice: ${baseTrayPrice}")
 
                             val discountPerTray = discountPerPetti / 12.0
+                            Log.d("loadProducts", "discountPerTray: ${discountPerTray}")
                             val finalTrayPrice = (baseTrayPrice - discountPerTray).coerceAtLeast(0.0)
+                            Log.d("loadProducts", "finalTrayPrice: ${finalTrayPrice}")
 
                             val rawPettiPrice = baseTrayPrice * 12.0
+                            Log.d("loadProducts", "rawPettiPrice: ${rawPettiPrice}")
                             val finalPettiPrice = (rawPettiPrice - discountPerPetti).coerceAtLeast(0.0)
+                            Log.d("loadProducts", "finalPettiPrice: ${finalPettiPrice}")
 
 
                             val totalTrayQtyInStock = remainingMap.entries.find {

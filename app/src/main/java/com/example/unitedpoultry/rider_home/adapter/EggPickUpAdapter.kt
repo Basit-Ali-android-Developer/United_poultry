@@ -26,12 +26,15 @@ class EggPickUpAdapter(
         val product = products[position]
 
         holder.binding.tvProductName.text = product.name
+        holder.binding.etQuantity.setText(product.picked_quantity.toString())
+
+
 
         // Remove old watcher before recycling views
         holder.textWatcher?.let { holder.binding.etQuantity.removeTextChangedListener(it) }
 
-        val currentQty = quantityMap[product.id]
-        holder.binding.etQuantity.setText(currentQty?.toString() ?: "")
+      //  val currentQty = quantityMap[product.id]
+       // holder.binding.etQuantity.setText(currentQty?.toString() ?: "")
 
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

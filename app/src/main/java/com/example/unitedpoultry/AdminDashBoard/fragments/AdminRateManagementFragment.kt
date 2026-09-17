@@ -118,8 +118,8 @@ class AdminRateManagementFragment : Fragment(), TodayRateAdapter.OnPriceChangeLi
                 TodayRateItem(
                     product_id = item.product_id,
                     product_name = "Petti",
-                    packing = item.packing,
-                    eggs_count = item.eggs_count,
+                    packing = "Petti (12 Trays)",
+                    eggs_count = item.eggs_count* 12,
                     price = originalPrice * 12.0
                 )
             } else {
