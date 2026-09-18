@@ -166,4 +166,3 @@ git clone https://github.com/casdevelopment/United_poultry.git
 
 ---
 
-<p align="center"><i>Built and maintained by <a href="https://github.com/Basit-Ali-android-Developer">Basit Ali</a></i></p>
