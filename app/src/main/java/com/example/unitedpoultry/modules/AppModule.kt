@@ -7,6 +7,7 @@ import com.example.unitedpoultry.AdminArea.viewmodel.AddAreaViewModel
 import com.example.unitedpoultry.AdminArea.viewmodel.AreaViewModel
 import com.example.unitedpoultry.AdminArea.viewmodel.DeleteAreaViewModel
 import com.example.unitedpoultry.AdminArea.viewmodel.EditAreaViewModel
+import com.example.unitedpoultry.AdminDashBoard.viewmodel.ReportViewModel
 import com.example.unitedpoultry.AdminHome.viewmodel.DailyPerformanceStatsViewModel
 import com.example.unitedpoultry.rider_home.viewmodel.ReturnWasteViewModel
 import com.example.unitedpoultry.AdminRiderModule.viewmodel.AddRiderViewModel
@@ -125,6 +126,7 @@ val viewModelModule= module{
     viewModel { CollectionViewModel(get()) }
 
     viewModel { ChangePasswordViewModel(get()) }
+    viewModel { ReportViewModel(get()) }
 
 }
 

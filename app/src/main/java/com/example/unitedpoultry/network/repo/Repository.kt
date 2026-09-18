@@ -4,6 +4,8 @@ package com.example.unitedpoultry.network.repo
 import com.example.unitedpoultry.AdminArea.model.AddAreaRequestModel
 import com.example.unitedpoultry.AdminArea.model.AreaDataResponseModel
 import com.example.unitedpoultry.AdminArea.model.AreaModel
+import com.example.unitedpoultry.AdminDashBoard.model.ReportData
+import com.example.unitedpoultry.AdminDashBoard.model.ReportResponseModel
 import com.example.unitedpoultry.rider_home.model.ReturnWasteRequestModel
 import com.example.unitedpoultry.AdminRiderModule.model.RiderDataResponceModel
 import com.example.unitedpoultry.AdminRiderModule.model.RiderModel
@@ -384,5 +386,20 @@ class Repository(private val api: ApiInterface) {
 
 
     suspend fun getExpenses() = api.getExpenses()
+
+
+    suspend fun getInventoryReport(fromDate: String,toDate: String): Response<BaseResponse<ReportData>> {
+        return api.getInventoryReport(fromDate,toDate,"pdf")
+    }
+
+    suspend fun getSalesReport(fromDate: String,toDate: String): Response<BaseResponse<ReportData>> {
+        return api.getSalesReport(fromDate,toDate,"pdf")
+    }
+
+    suspend fun getShopWiseReport(fromDate: String,toDate: String): Response<BaseResponse<ReportData>> {
+        return api.getShopWiseReport(fromDate,toDate,"pdf")
+    }
+
+
 }
 

@@ -3,6 +3,8 @@ package com.example.unitedpoultry.network.api
 import com.example.unitedpoultry.AdminArea.model.AddAreaRequestModel
 import com.example.unitedpoultry.AdminArea.model.AreaDataResponseModel
 import com.example.unitedpoultry.AdminArea.model.AreaModel
+import com.example.unitedpoultry.AdminDashBoard.model.ReportData
+import com.example.unitedpoultry.AdminDashBoard.model.ReportResponseModel
 import com.example.unitedpoultry.rider_home.model.ReturnWasteRequestModel
 import com.example.unitedpoultry.AdminRiderModule.model.RiderDataResponceModel
 import com.example.unitedpoultry.AdminRiderModule.model.RiderModel
@@ -371,5 +373,27 @@ interface ApiInterface {
 
     @GET("seller/expenses/heads")
     suspend fun getExpenses(): Response<BaseResponse<ExpenseHeadData>>
+
+    @GET("admin/reports/inventory")
+    suspend fun getInventoryReport(
+        @Query("from_date") fromDate: String,
+        @Query("to_date") toDate: String,
+        @Query("format") format: String,
+    ): Response<BaseResponse<ReportData>>
+
+
+    @GET("admin/reports/sales")
+    suspend fun getSalesReport(
+        @Query("from_date") fromDate: String,
+        @Query("to_date") toDate: String,
+        @Query("format") format: String,
+    ): Response<BaseResponse<ReportData>>
+
+    @GET("admin/reports/shop-wise")
+    suspend fun getShopWiseReport(
+        @Query("from_date") fromDate: String,
+        @Query("to_date") toDate: String,
+        @Query("format") format: String,
+    ): Response<BaseResponse<ReportData>>
 
 }
